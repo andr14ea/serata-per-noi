@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Una serata per noi ❤️</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+      background:
+        radial-gradient(circle at top left, #ffd6e7, transparent 35%),
+        radial-gradient(circle at bottom right, #ffc4d6, transparent 35%),
+        linear-gradient(135deg, #fff5f8, #ffe4ec);
+
+      color: #3a1f2b;
+      overflow-x: hidden;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 520px;
+
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(15px);
+
+      border-radius: 28px;
+      padding: 38px 30px;
+
+      box-shadow:
+        0 25px 70px rgba(125, 45, 75, 0.18),
+        0 5px 15px rgba(125, 45, 75, 0.08);
+
+      text-align: center;
+
+      animation: appear 0.8s ease;
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateY(25px) scale(0.97);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .heart {
+      font-size: 55px;
+      animation: heartbeat 1.5s infinite;
+      margin-bottom: 10px;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% {
+        transform: scale(1);
+      }
+
+      15% {
+        transform: scale(1.12);
+      }
+
+      30% {
+        transform: scale(1);
+      }
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+      color: #c52f64;
+    }
+
+    .subtitle {
+      font-size: 17px;
+      color: #765260;
+      line-height: 1.5;
+      margin-bottom: 30px;
+    }
+
+    .section {
+      text-align: left;
+      margin-top: 24px;
+    }
+
+    .section-title {
+      font-weight: 700;
+      margin-bottom: 12px;
+      font-size: 17px;
+    }
+
+    .food-options {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .food-option {
+      position: relative;
+    }
+
+    .food-option input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .food-option label {
+      display: block;
+      padding: 15px 10px;
+
+      border: 2px solid #f1d5df;
+      border-radius: 16px;
+
+      background: #fffafa;
+      text-align: center;
+
+      cursor: pointer;
+      transition: 0.2s ease;
+
+      font-size: 15px;
+    }
+
+    .food-option label:hover {
+      transform: translateY(-2px);
+      border-color: #e88aaa;
+    }
+
+    .food-option input:checked + label {
+      background: #ffe3ec;
+      border-color: #d9366d;
+      color: #b42355;
+      box-shadow: 0 5px 15px rgba(217, 54, 109, 0.12);
+      transform: scale(1.02);
+    }
+
+    .date-time {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    input[type="date"],
+    input[type="time"] {
+      width: 100%;
+      padding: 14px;
+
+      border: 2px solid #f1d5df;
+      border-radius: 14px;
+
+      background: #fffafa;
+      color: #3a1f2b;
+
+      font-size: 16px;
+      outline: none;
+
+      transition: 0.2s;
+    }
+
+    input[type="date"]:focus,
+    input[type="time"]:focus {
+      border-color: #d9366d;
+    }
+
+    .confirm {
+      width: 100%;
+      margin-top: 30px;
+
+      border: none;
+      border-radius: 18px;
+
+      padding: 17px;
+
+      background: linear-gradient(135deg, #d9366d, #ef5c8c);
+      color: white;
+
+      font-size: 17px;
+      font-weight: 700;
+
+      cursor: pointer;
+
+      box-shadow: 0 10px 25px rgba(217, 54, 109, 0.25);
+
+      transition: 0.2s;
+    }
+
+    .confirm:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(217, 54, 109, 0.3);
+    }
+
+    .confirm:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .hint {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #987582;
+    }
+
+    /* Schermata finale */
+
+    .success {
+      display: none;
+    }
+
+    .success.show {
+      display: block;
+      animation: appear 0.7s ease;
+    }
+
+    .main.hide {
+      display: none;
+    }
+
+    .success-icon {
+      font-size: 65px;
+      margin-bottom: 15px;
+    }
+
+    .success h2 {
+      color: #c52f64;
+      font-size: 30px;
+      margin-bottom: 15px;
+    }
+
+    .reservation {
+      background: #fff0f5;
+      border-radius: 18px;
+      padding: 20px;
+      margin: 22px 0;
+
+      text-align: left;
+      line-height: 1.8;
+    }
+
+    .love-message {
+      font-size: 17px;
+      line-height: 1.6;
+      color: #684450;
+    }
+
+    .hearts {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    .floating-heart {
+      position: absolute;
+      bottom: -30px;
+      animation: floatUp linear forwards;
+      opacity: 0.8;
+    }
+
+    @keyframes floatUp {
+      from {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.8;
+      }
+
+      to {
+        transform: translateY(-110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 450px) {
+      .card {
+        padding: 30px 20px;
+      }
+
+      h1 {
+        font-size: 27px;
+      }
+
+      .food-options {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .date-time {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="hearts" id="hearts"></div>
+
+  <main class="card">
+
+    <!-- PAGINA PRINCIPALE -->
+    <div class="main" id="mainPage">
+
+      <div class="heart">❤️</div>
+
+      <h1>Una serata per noi</h1>
+
+      <p class="subtitle">
+        Amore, ho deciso che dobbiamo uscire insieme. 😌<br>
+        Però questa volta scegli tu...
+        <strong>quasi tutto.</strong> ❤️
+      </p>
+
+
+      <!-- CIBO -->
+      <div class="section">
+
+        <div class="section-title">
+          🍽️ Cosa mangiamo?
+        </div>
+
+        <div class="food-options">
+
+          <div class="food-option">
+            <input type="radio" name="food" id="pizza" value="🍕 Pizza">
+            <label for="pizza">🍕 Pizza</label>
+          </div>
+
+          <div class="food-option">
+            <input type="radio" name="food" id="sushi" value="🍣 Sushi">
+            <label for="sushi">🍣 Sushi</label>
+          </div>
+
+          <div class="food-option">
+            <input type="radio" name="food" id="mexican" value="🌮 Messicano">
+            <label for="mexican">🌮 Messicano</label>
+          </div>
+
+          <div class="food-option">
+            <input type="radio" name="food" id="burger" value="🍔 Hamburger">
+            <label for="burger">🍔 Hamburger</label>
+          </div>
+
+          <div class="food-option">
+            <input type="radio" name="food" id="italian" value="🍝 Italiano">
+            <label for="italian">🍝 Italiano</label>
+          </div>
+
+          <div class="food-option">
+            <input type="radio" name="food" id="other" value="✨ Altro">
+            <label for="other">✨ Altro</label>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- DATA E ORA -->
+      <div class="section">
+
+        <div class="section-title">
+          📅 Quando usciamo?
+        </div>
+
+        <div class="date-time">
+
+          <input
+            type="date"
+            id="date"
+            required
+          >
+
+          <input
+            type="time"
+            id="time"
+            required
+          >
+
+        </div>
+
+      </div>
+
+
+      <button
+        class="confirm"
+        id="confirm"
+        disabled
+      >
+        💕 Conferma la nostra serata
+      </button>
+
+      <p class="hint" id="hint">
+        Scegli prima cosa mangiamo e quando. 😏
+      </p>
+
+    </div>
+
+
+    <!-- PAGINA FINALE -->
+    <div class="success" id="successPage">
+
+      <div class="success-icon">🥰</div>
+
+      <h2>APPUNTAMENTO CONFERMATO!</h2>
+
+      <p class="love-message">
+        Perfetto amore. ❤️<br>
+        Allora abbiamo ufficialmente una serata tutta per noi.
+      </p>
+
+      <div class="reservation">
+
+        <div>
+          <strong>🍽️ Cena:</strong>
+          <span id="finalFood"></span>
+        </div>
+
+        <div>
+          <strong>📅 Data:</strong>
+          <span id="finalDate"></span>
+        </div>
+
+        <div>
+          <strong>🕐 Ora:</strong>
+          <span id="finalTime"></span>
+        </div>
+
+      </div>
+
+      <p class="love-message">
+        Preparati. ❤️<br>
+        Il resto lo organizzo io.
+      </p>
+
+    </div>
+
+  </main>
+
+
+  <script>
+
+    const foodInputs = document.querySelectorAll(
+      'input[name="food"]'
+    );
+
+    const dateInput = document.getElementById("date");
+    const timeInput = document.getElementById("time");
+
+    const confirmButton = document.getElementById("confirm");
+    const hint = document.getElementById("hint");
+
+    const mainPage = document.getElementById("mainPage");
+    const successPage = document.getElementById("successPage");
+
+    const finalFood = document.getElementById("finalFood");
+    const finalDate = document.getElementById("finalDate");
+    const finalTime = document.getElementById("finalTime");
+
+
+    // Impedisce di scegliere una data nel passato
+    const today = new Date();
+
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+
+    dateInput.min = `${year}-${month}-${day}`;
+
+
+    function checkForm() {
+
+      const selectedFood = document.querySelector(
+        'input[name="food"]:checked'
+      );
+
+      const hasDate = dateInput.value !== "";
+      const hasTime = timeInput.value !== "";
+
+      const complete =
+        selectedFood &&
+        hasDate &&
+        hasTime;
+
+      confirmButton.disabled = !complete;
+
+      if (complete) {
+        hint.textContent = "Perfetto. ❤️ Ora puoi confermare.";
+      } else {
+        hint.textContent =
+          "Scegli prima cosa mangiamo e quando. 😏";
+      }
+    }
+
+
+    foodInputs.forEach(input => {
+      input.addEventListener("change", checkForm);
+    });
+
+    dateInput.addEventListener("change", checkForm);
+    timeInput.addEventListener("change", checkForm);
+
+
+    confirmButton.addEventListener("click", () => {
+
+      const selectedFood = document.querySelector(
+        'input[name="food"]:checked'
+      );
+
+      if (!selectedFood || !dateInput.value || !timeInput.value) {
+        return;
+      }
+
+
+      // Formatta la data in italiano
+      const date = new Date(
+        dateInput.value + "T00:00:00"
+      );
+
+      const formattedDate = date.toLocaleDateString(
+        "it-IT",
+        {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+          year: "numeric"
+        }
+      );
+
+
+      finalFood.textContent = selectedFood.value;
+
+      finalDate.textContent =
+        formattedDate.charAt(0).toUpperCase() +
+        formattedDate.slice(1);
+
+      finalTime.textContent = timeInput.value;
+
+
+      // Mostra schermata finale
+      mainPage.classList.add("hide");
+      successPage.classList.add("show");
+
+
+      // Esplosione di cuori ❤️
+      createHearts();
+
+    });
+
+
+    function createHearts() {
+
+      const container =
+        document.getElementById("hearts");
+
+      const emojis = [
+        "❤️",
+        "💕",
+        "💖",
+        "💗",
+        "💓",
+        "🥰"
+      ];
+
+      for (let i = 0; i < 35; i++) {
+
+        const heart =
+          document.createElement("div");
+
+        heart.className =
+          "floating-heart";
+
+        heart.textContent =
+          emojis[Math.floor(
+            Math.random() * emojis.length
+          )];
+
+        heart.style.left =
+          Math.random() * 100 + "%";
+
+        heart.style.fontSize =
+          (15 + Math.random() * 25) + "px";
+
+        heart.style.animationDuration =
+          (3 + Math.random() * 4) + "s";
+
+        heart.style.animationDelay =
+          Math.random() * 1.5 + "s";
+
+        container.appendChild(heart);
+
+
+        setTimeout(() => {
+          heart.remove();
+        }, 8000);
+      }
+    }
+
+  </script>
+
+</body>
+</html>
